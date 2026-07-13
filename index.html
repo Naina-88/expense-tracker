@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personal Expense Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Header -->
+        <header class="header">
+
+            <div>
+                <h1>💰 Expense Tracker</h1>
+                <p class="subtitle">
+                    Track your spending efficiently
+                </p>
+            </div>
+
+            <button id="themeBtn" class="theme-btn">
+                🌙
+            </button>
+
+        </header>
+
+        <section id="budgetBanner" class="budget-banner">
+
+            <div id="budgetMessage">
+                Budget Healthy
+            </div>
+
+        </section>
+
+        <!-- Monthly Summary Card -->
+        <section class="summary-card">
+
+            <div class="summary-left">
+
+                <div class="label">
+                    Monthly Expense
+                </div>
+
+                <h2 id="monthlyExpense">
+                    ₹0
+                </h2>
+
+                <p>
+                    Budget: ₹20,000
+                </p>
+
+            </div>
+
+            <div class="summary-right">
+
+                <div class="progress-circle">
+
+                    <span id="budgetPercent">
+                        0%
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Statistics -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="title">Today</div>
+                <div class="value" id="todaySpend">₹0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="title">This Week</div>
+                <div class="value" id="weeklySpend">₹0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="title">Income</div>
+                <div class="value" id="monthlyIncome">₹0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="title">Net Balance</div>
+                <div class="value" id="netBalance">₹0</div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="title">Remaining Budget</div>
+                <div class="value" id="remainingBudget">
+                    ₹20,000
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Add Transaction -->
+        <section class="add-transaction">
+
+            <h3>Add Transaction</h3>
+
+            <input type="text" id="description" placeholder="Description">
+
+            <input type="number" id="amount" placeholder="Amount">
+
+            <select id="type">
+                <option value="expense">
+                    Expense
+                </option>
+
+                <option value="income">
+                    Income
+                </option>
+            </select>
+
+            <select id="category">
+                <option>Food</option>
+                <option>Transport</option>
+                <option>Shopping</option>
+                <option>Utilities</option>
+                <option>Entertainment</option>
+                <option>Health</option>
+                <option>Other</option>
+            </select>
+
+            <button id="addBtn">
+                Add Transaction
+            </button>
+
+        </section>
+
+        <!-- Recent Transactions -->
+        <section class="transactions-section">
+
+            <div class="section-title">
+                Recent Transactions
+            </div>
+
+            <ul id="transactionList">
+            </ul>
+
+        </section>
+
+        <section class="transactions-section">
+
+            <div class="section-title">
+                Expense Analytics
+            </div>
+
+            <canvas id="expenseChart"></canvas>
+
+        </section>
+
+        <section class="transactions-section">
+
+            <div class="section-title">
+                Backup & Restore
+            </div>
+
+            <button id="exportBtn">
+                Export Backup
+            </button>
+
+            <input type="file" id="importFile" accept=".json" style="margin-top:15px;">
+
+        </section>
+
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>

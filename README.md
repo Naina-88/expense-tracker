@@ -1,1 +1,1 @@
-# expense-tracker
+Offline expense tracker starter project. Run with Live Server in VS Code.
