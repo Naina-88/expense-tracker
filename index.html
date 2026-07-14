@@ -2,130 +2,201 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Personal Expense Tracker</title>
-
     <link rel="stylesheet" href="style.css">
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
 <body>
 
     <div class="app-container">
 
-        <!-- Header -->
         <header class="header">
-
             <div>
                 <h1>💰 Expense Tracker</h1>
-                <p class="subtitle">
-                    Track your spending efficiently
-                </p>
+                <p class="subtitle">Track your spending efficiently</p>
             </div>
 
-            <button id="themeBtn" class="theme-btn">
-                🌙
-            </button>
-
+            <button id="themeBtn" class="theme-btn">🌙</button>
         </header>
 
-        <section id="budgetBanner" class="budget-banner">
-
-            <div id="budgetMessage">
-                Budget Healthy
-            </div>
-
-        </section>
-
-        <!-- Monthly Summary Card -->
         <section class="summary-card">
-
             <div class="summary-left">
-
-                <div class="label">
-                    Monthly Expense
-                </div>
-
-                <h2 id="monthlyExpense">
-                    ₹0
-                </h2>
-
-                <p>
-                    Budget: ₹20,000
-                </p>
-
+                <div class="label">This Month Spend</div>
+                <h2 id="monthlyExpense">₹0</h2>
+                <p id="incomeSummary">Income: ₹0</p>
             </div>
 
             <div class="summary-right">
-
                 <div class="progress-circle">
-
-                    <span id="budgetPercent">
-                        0%
-                    </span>
-
+                    <span id="spentPercent">0%</span>
                 </div>
-
             </div>
-
         </section>
 
-        <!-- Statistics -->
         <section class="stats-grid">
 
-            <div class="stat-card">
+            <div class="stat-card stat-blue">
+                <div class="stat-top">
+                    <div class="stat-icon">☀️</div>
+                </div>
                 <div class="title">Today</div>
                 <div class="value" id="todaySpend">₹0</div>
+                <div class="stat-note">Daily spend</div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card stat-purple">
+                <div class="stat-top">
+                    <div class="stat-icon">📅</div>
+                </div>
                 <div class="title">This Week</div>
                 <div class="value" id="weeklySpend">₹0</div>
+                <div class="stat-note">Last 7 days</div>
             </div>
 
-            <div class="stat-card">
-                <div class="title">Income</div>
+            <div class="stat-card stat-green">
+                <div class="stat-top">
+                    <div class="stat-icon">💵</div>
+                </div>
+                <div class="title">Monthly Income</div>
                 <div class="value" id="monthlyIncome">₹0</div>
+                <div class="stat-note">Selected month</div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card stat-balance">
+                <div class="stat-top">
+                    <div class="stat-icon">⚖️</div>
+                </div>
                 <div class="title">Net Balance</div>
                 <div class="value" id="netBalance">₹0</div>
+                <div class="stat-note">Income - expense</div>
             </div>
 
-
-            <div class="stat-card">
-                <div class="title">Remaining Budget</div>
-                <div class="value" id="remainingBudget">
-                    ₹20,000
+            <div class="stat-card stat-red">
+                <div class="stat-top">
+                    <div class="stat-icon">📊</div>
                 </div>
+                <div class="title">Yearly Expense</div>
+                <div class="value" id="yearlyExpense">₹0</div>
+                <div class="stat-note">Year total spent</div>
+            </div>
+
+            <div class="stat-card stat-gold">
+                <div class="stat-top">
+                    <div class="stat-icon">🏦</div>
+                </div>
+                <div class="title">Yearly Income</div>
+                <div class="value" id="yearlyIncome">₹0</div>
+                <div class="stat-note">Year total income</div>
             </div>
 
         </section>
 
-        <!-- Add Transaction -->
-        <section class="add-transaction">
+        <section class="transactions-section calendar-section">
 
-            <h3>Add Transaction</h3>
+            <div class="calendar-title-row">
+                <div>
+                    <div class="section-title">Calendar View</div>
+                    <p class="calendar-subtitle">Daily spending overview</p>
+                </div>
+            </div>
+
+            <div class="calendar-header">
+                <button id="prevMonthBtn" class="calendar-nav-btn">←</button>
+
+                <div class="calendar-month-box">
+                    <h3 id="calendarTitle">Month</h3>
+                    <span>Tap a date to view transactions</span>
+                </div>
+
+                <button id="nextMonthBtn" class="calendar-nav-btn">→</button>
+            </div>
+
+            <div class="calendar-weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+
+            <div id="calendarGrid" class="calendar-grid"></div>
+
+            <div class="day-details">
+                <h3 id="selectedDayTitle">Select a day</h3>
+                <ul id="selectedDayTransactions"></ul>
+            </div>
+
+        </section>
+
+        <section class="transactions-section">
+
+            <div class="section-title">Recent Transactions</div>
+
+            <div class="search-filter-box">
+                <input type="text" id="searchInput" placeholder="Search transactions...">
+
+                <div class="filter-chips">
+                    <button class="filter-chip active" data-filter="all">All</button>
+                    <button class="filter-chip" data-filter="expense">Expense</button>
+                    <button class="filter-chip" data-filter="income">Income</button>
+                    <button class="filter-chip" data-filter="Food">Food</button>
+                    <button class="filter-chip" data-filter="Transport">Transport</button>
+                    <button class="filter-chip" data-filter="Shopping">Shopping</button>
+                    <button class="filter-chip" data-filter="Utilities">Utilities</button>
+                    <button class="filter-chip" data-filter="Entertainment">Entertainment</button>
+                    <button class="filter-chip" data-filter="Health">Health</button>
+                    <button class="filter-chip" data-filter="Other">Other</button>
+                </div>
+            </div>
+
+            <ul id="transactionList"></ul>
+
+        </section>
+
+        <section class="transactions-section">
+
+            <div class="section-title">Expense Analytics</div>
+
+            <canvas id="expenseChart"></canvas>
+
+        </section>
+
+        <section class="transactions-section">
+
+            <div class="section-title">Backup & Restore</div>
+
+            <button id="exportBtn">Export Backup</button>
+
+            <input type="file" id="importFile" accept=".json">
+
+        </section>
+
+    </div>
+
+    <button id="transactionFab" class="transaction-fab">+</button>
+
+    <button id="incomeFab" class="income-fab">₹</button>
+
+    <div id="transactionModal" class="modal-overlay">
+        <div class="modal-box">
+
+            <div class="modal-header">
+                <h3>Add Transaction</h3>
+                <button id="closeTransactionModal" class="modal-close">×</button>
+            </div>
 
             <input type="text" id="description" placeholder="Description">
 
             <input type="number" id="amount" placeholder="Amount">
 
             <select id="type">
-                <option value="expense">
-                    Expense
-                </option>
-
-                <option value="income">
-                    Income
-                </option>
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
             </select>
 
             <select id="category">
@@ -138,48 +209,28 @@
                 <option>Other</option>
             </select>
 
-            <button id="addBtn">
-                Add Transaction
-            </button>
+            <button id="addBtn">Add Transaction</button>
 
-        </section>
+        </div>
+    </div>
 
-        <!-- Recent Transactions -->
-        <section class="transactions-section">
+    <div id="incomeModal" class="modal-overlay">
+        <div class="modal-box">
 
-            <div class="section-title">
-                Recent Transactions
+            <div class="modal-header">
+                <h3>Monthly Income</h3>
+                <button id="closeIncomeModal" class="modal-close">×</button>
             </div>
 
-            <ul id="transactionList">
-            </ul>
+            <label class="input-label">Select Month</label>
+            <input type="month" id="monthPicker">
 
-        </section>
+            <label class="input-label">Income for Selected Month</label>
+            <input type="number" id="monthlyIncomeInput" placeholder="Enter monthly income">
 
-        <section class="transactions-section">
+            <button id="saveIncomeBtn">Save Income</button>
 
-            <div class="section-title">
-                Expense Analytics
-            </div>
-
-            <canvas id="expenseChart"></canvas>
-
-        </section>
-
-        <section class="transactions-section">
-
-            <div class="section-title">
-                Backup & Restore
-            </div>
-
-            <button id="exportBtn">
-                Export Backup
-            </button>
-
-            <input type="file" id="importFile" accept=".json" style="margin-top:15px;">
-
-        </section>
-
+        </div>
     </div>
 
     <script src="app.js"></script>
