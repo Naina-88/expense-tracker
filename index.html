@@ -159,27 +159,14 @@
         </section>
 
         <section class="transactions-section">
-
             <div class="section-title">Expense Analytics</div>
-
             <canvas id="expenseChart"></canvas>
-
-        </section>
-
-        <section class="transactions-section">
-
-            <div class="section-title">Backup & Restore</div>
-
-            <button id="exportBtn">Export Backup</button>
-
-            <input type="file" id="importFile" accept=".json">
-
         </section>
 
     </div>
 
+    <button id="settingsFab" class="settings-fab">⚙</button>
     <button id="transactionFab" class="transaction-fab">+</button>
-
     <button id="incomeFab" class="income-fab">₹</button>
 
     <div id="transactionModal" class="modal-overlay">
@@ -191,7 +178,6 @@
             </div>
 
             <input type="text" id="description" placeholder="Description">
-
             <input type="number" id="amount" placeholder="Amount">
 
             <select id="type">
@@ -229,6 +215,41 @@
             <input type="number" id="monthlyIncomeInput" placeholder="Enter monthly income">
 
             <button id="saveIncomeBtn">Save Income</button>
+
+        </div>
+    </div>
+
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-box">
+
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button id="closeSettingsModal" class="modal-close">×</button>
+            </div>
+
+            <div class="settings-group">
+                <h4>Backup & Restore</h4>
+
+                <button id="exportBtn" class="settings-btn green-btn">
+                    Export JSON Backup
+                </button>
+
+                <button id="exportCsvBtn" class="settings-btn blue-btn">
+                    Export CSV
+                </button>
+
+                <label class="settings-file-label">
+                    Import JSON Backup
+                    <input type="file" id="importFile" accept=".json">
+                </label>
+            </div>
+
+            <div class="settings-group">
+                <h4>Storage</h4>
+                <p id="storageInfo" class="settings-info">
+                    Local device storage
+                </p>
+            </div>
 
         </div>
     </div>

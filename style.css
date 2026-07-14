@@ -29,8 +29,6 @@ body {
     padding: 20px;
 }
 
-/* Header */
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -66,8 +64,6 @@ body {
 .theme-btn:hover {
     transform: rotate(12deg) scale(1.05);
 }
-
-/* Summary card */
 
 .summary-card {
     position: relative;
@@ -121,9 +117,7 @@ body {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: conic-gradient(white 0deg,
-            white 0deg,
-            rgba(255, 255, 255, 0.2) 0deg);
+    background: conic-gradient(white 0deg, white 0deg, rgba(255, 255, 255, 0.2) 0deg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -147,8 +141,6 @@ body {
     font-size: 23px;
     font-weight: 700;
 }
-
-/* Dashboard cards */
 
 .stats-grid {
     display: grid;
@@ -249,8 +241,6 @@ body {
     background: #f59e0b;
 }
 
-/* Shared sections */
-
 .transactions-section {
     background: var(--card);
     border-radius: 20px;
@@ -267,8 +257,6 @@ body {
     margin-bottom: 20px;
     letter-spacing: -0.3px;
 }
-
-/* Inputs and buttons */
 
 input,
 select {
@@ -291,7 +279,8 @@ select:focus {
 
 #addBtn,
 #saveIncomeBtn,
-#exportBtn {
+#exportBtn,
+#exportCsvBtn {
     width: 100%;
     padding: 14px;
     border: none;
@@ -307,21 +296,11 @@ select:focus {
 
 #addBtn:hover,
 #saveIncomeBtn:hover,
-#exportBtn:hover {
+#exportBtn:hover,
+#exportCsvBtn:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 18px rgba(108, 76, 255, 0.25);
 }
-
-#exportBtn {
-    background: #16a34a;
-}
-
-#importFile {
-    margin-top: 15px;
-    background: white;
-}
-
-/* Search and filters */
 
 .search-filter-box {
     margin-bottom: 18px;
@@ -366,8 +345,6 @@ select:focus {
     color: white;
     box-shadow: 0 6px 14px rgba(108, 76, 255, 0.22);
 }
-
-/* Transactions */
 
 #transactionList,
 #selectedDayTransactions {
@@ -436,28 +413,16 @@ select:focus {
     font-size: 16px;
 }
 
-.delete-btn:hover {
-    background: #fecaca;
-}
-
 .edit-btn {
     background: #dbeafe;
     color: #2563eb;
     font-size: 14px;
 }
 
-.edit-btn:hover {
-    background: #bfdbfe;
-}
-
-/* Chart */
-
 #expenseChart {
     max-height: 350px;
     margin-top: 20px;
 }
-
-/* Calendar */
 
 .calendar-section {
     padding: 26px;
@@ -517,10 +482,6 @@ select:focus {
     transition: 0.2s ease;
 }
 
-.calendar-nav-btn:hover {
-    transform: translateY(-2px) scale(1.03);
-}
-
 .calendar-weekdays,
 .calendar-grid {
     display: grid;
@@ -568,10 +529,6 @@ select:focus {
     cursor: default;
 }
 
-.calendar-day.empty:hover {
-    transform: none;
-}
-
 .calendar-date {
     font-size: 14px;
     font-weight: 700;
@@ -612,17 +569,6 @@ select:focus {
     box-shadow: 0 14px 28px rgba(108, 76, 255, 0.2);
 }
 
-.calendar-day.selected::after {
-    content: "";
-    position: absolute;
-    right: -18px;
-    top: -18px;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    background: rgba(108, 76, 255, 0.12);
-}
-
 .day-details {
     margin-top: 24px;
     padding-top: 22px;
@@ -633,26 +579,6 @@ select:focus {
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 14px;
-    letter-spacing: -0.3px;
-}
-
-#selectedDayTransactions li {
-    border-radius: 16px;
-    padding: 14px 15px;
-    background: linear-gradient(180deg, #fff, #fafafa);
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-}
-
-.day-transaction-title {
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.day-transaction-category {
-    font-size: 12px;
-    color: var(--subtext);
-    margin-top: 3px;
 }
 
 .no-transactions {
@@ -663,12 +589,10 @@ select:focus {
     background: #fafafa !important;
 }
 
-/* Floating buttons */
-
 .transaction-fab,
-.income-fab {
+.income-fab,
+.settings-fab {
     position: fixed;
-    right: 22px;
     width: 64px;
     height: 64px;
     border: none;
@@ -683,6 +607,7 @@ select:focus {
 }
 
 .transaction-fab {
+    right: 22px;
     bottom: 96px;
     background: linear-gradient(135deg, #111827, #374151);
     font-size: 36px;
@@ -691,33 +616,24 @@ select:focus {
 }
 
 .income-fab {
+    right: 22px;
     bottom: 22px;
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     font-size: 30px;
     font-weight: 700;
 }
 
+.settings-fab {
+    left: 22px;
+    bottom: 22px;
+    background: linear-gradient(135deg, #334155, #111827);
+    font-size: 24px;
+}
+
 .transaction-fab:hover,
-.income-fab:hover {
+.income-fab:hover,
+.settings-fab:hover {
     transform: translateY(-4px) scale(1.05);
-}
-
-.income-fab:hover {
-    box-shadow: 0 16px 36px rgba(108, 76, 255, 0.38);
-}
-
-.transaction-fab:hover {
-    box-shadow: 0 16px 36px rgba(17, 24, 39, 0.35);
-}
-
-/* Modals */
-
-.input-label {
-    display: block;
-    margin-top: 12px;
-    margin-bottom: 6px;
-    font-size: 14px;
-    color: var(--subtext);
 }
 
 .modal-overlay {
@@ -778,7 +694,67 @@ select:focus {
     cursor: pointer;
 }
 
-/* Dark mode */
+.input-label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: var(--subtext);
+}
+
+.settings-group {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.settings-group:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.settings-group h4 {
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: var(--subtext);
+}
+
+.settings-btn {
+    margin-bottom: 10px;
+}
+
+.green-btn {
+    background: #16a34a !important;
+}
+
+.blue-btn {
+    background: #2563eb !important;
+}
+
+.settings-file-label {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    background: #f1f3f8;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.settings-file-label input {
+    display: none;
+}
+
+.settings-info {
+    font-size: 13px;
+    color: var(--subtext);
+    line-height: 1.5;
+}
 
 body.dark {
     --bg: #111827;
@@ -796,27 +772,20 @@ body.dark .modal-close {
 }
 
 body.dark input,
-body.dark select,
-body.dark #importFile,
-body.dark #monthPicker,
-body.dark #monthlyIncomeInput {
+body.dark select {
     background: #111827;
     color: white;
     border: 1px solid #374151;
 }
 
-body.dark .stat-card {
+body.dark .stat-card,
+body.dark .transactions-section {
     background: rgba(31, 41, 55, 0.86);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 body.dark .stat-icon {
     background: #111827;
-}
-
-body.dark .transactions-section {
-    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 body.dark #transactionList li,
@@ -843,15 +812,8 @@ body.dark .calendar-amount {
     color: #fca5a5;
 }
 
-body.dark #selectedDayTransactions li {
-    background: linear-gradient(180deg, #1f2937, #111827);
-}
-
-body.dark #searchInput {
-    background: #111827;
-}
-
-body.dark .filter-chip {
+body.dark .filter-chip,
+body.dark .settings-file-label {
     background: #111827;
     color: #cbd5e1;
     border: 1px solid #374151;
@@ -862,8 +824,6 @@ body.dark .filter-chip.active {
     color: white;
     border: none;
 }
-
-/* Responsive */
 
 @media (max-width: 768px) {
     .app-container {
@@ -879,7 +839,6 @@ body.dark .filter-chip.active {
         gap: 20px;
         text-align: center;
         padding: 22px;
-        border-radius: 24px;
     }
 
     .summary-left h2 {
@@ -961,10 +920,6 @@ body.dark .filter-chip.active {
         font-size: 9px;
         padding: 3px 5px;
     }
-
-    .day-details h3 {
-        font-size: 18px;
-    }
 }
 
 @media (max-width: 600px) {
@@ -984,17 +939,24 @@ body.dark .filter-chip.active {
     }
 
     .transaction-fab,
-    .income-fab {
-        right: 18px;
-        width: 60px;
-        height: 60px;
+    .income-fab,
+    .settings-fab {
+        width: 58px;
+        height: 58px;
     }
 
     .transaction-fab {
-        bottom: 90px;
+        right: 18px;
+        bottom: 88px;
     }
 
     .income-fab {
+        right: 18px;
+        bottom: 18px;
+    }
+
+    .settings-fab {
+        left: 18px;
         bottom: 18px;
     }
 }

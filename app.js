@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     safeClick("themeBtn", toggleTheme);
 
     safeClick("exportBtn", exportData);
+    safeClick("exportCsvBtn", exportCsvData);
     safeChange("importFile", importData);
 
     safeClick("saveIncomeBtn", saveMonthlyIncome);
@@ -28,8 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
     safeClick("transactionFab", openTransactionModal);
     safeClick("closeTransactionModal", closeTransactionModal);
 
+    safeClick("settingsFab", openSettingsModal);
+    safeClick("closeSettingsModal", closeSettingsModal);
+
     setupModalClose("incomeModal", closeIncomeModal);
     setupModalClose("transactionModal", closeTransactionModal);
+    setupModalClose("settingsModal", closeSettingsModal);
 
     setupSearch();
     setupFilters();
@@ -38,46 +43,33 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key === "Escape") {
             closeIncomeModal();
             closeTransactionModal();
+            closeSettingsModal();
         }
     });
 });
 
 function safeClick(id, fn) {
     const element = document.getElementById(id);
-
-    if (element) {
-        element.addEventListener("click", fn);
-    }
+    if (element) element.addEventListener("click", fn);
 }
 
 function safeChange(id, fn) {
     const element = document.getElementById(id);
-
-    if (element) {
-        element.addEventListener("change", fn);
-    }
+    if (element) element.addEventListener("change", fn);
 }
 
 function setupModalClose(modalId, closeFunction) {
     const modal = document.getElementById(modalId);
-
-    if (!modal) {
-        return;
-    }
+    if (!modal) return;
 
     modal.addEventListener("click", event => {
-        if (event.target.id === modalId) {
-            closeFunction();
-        }
+        if (event.target.id === modalId) closeFunction();
     });
 }
 
 function setupSearch() {
     const searchInput = document.getElementById("searchInput");
-
-    if (!searchInput) {
-        return;
-    }
+    if (!searchInput) return;
 
     searchInput.addEventListener("input", event => {
         searchQuery = event.target.value.trim().toLowerCase();
@@ -90,14 +82,9 @@ function setupFilters() {
 
     filterButtons.forEach(button => {
         button.addEventListener("click", () => {
-            filterButtons.forEach(item => {
-                item.classList.remove("active");
-            });
-
+            filterButtons.forEach(item => item.classList.remove("active"));
             button.classList.add("active");
-
             activeFilter = button.dataset.filter || "all";
-
             renderTransactions();
         });
     });
@@ -105,71 +92,54 @@ function setupFilters() {
 
 function openIncomeModal() {
     const modal = document.getElementById("incomeModal");
-
-    if (!modal) {
-        return;
-    }
-
+    if (!modal) return;
     modal.classList.add("show");
-
     updateIncomeInput();
 }
 
 function closeIncomeModal() {
     const modal = document.getElementById("incomeModal");
-
-    if (!modal) {
-        return;
-    }
-
+    if (!modal) return;
     modal.classList.remove("show");
 }
 
 function openTransactionModal() {
     const modal = document.getElementById("transactionModal");
-
-    if (!modal) {
-        return;
-    }
+    if (!modal) return;
 
     modal.classList.add("show");
 
     const descriptionInput = document.getElementById("description");
-
     if (descriptionInput) {
-        setTimeout(() => {
-            descriptionInput.focus();
-        }, 150);
+        setTimeout(() => descriptionInput.focus(), 150);
     }
 }
 
 function closeTransactionModal() {
     const modal = document.getElementById("transactionModal");
+    if (!modal) return;
+    modal.classList.remove("show");
+}
 
-    if (!modal) {
-        return;
-    }
+function openSettingsModal() {
+    const modal = document.getElementById("settingsModal");
+    if (!modal) return;
 
+    updateStorageInfo();
+    modal.classList.add("show");
+}
+
+function closeSettingsModal() {
+    const modal = document.getElementById("settingsModal");
+    if (!modal) return;
     modal.classList.remove("show");
 }
 
 function addTransaction() {
-    const description = document
-        .getElementById("description")
-        .value
-        .trim();
-
-    const amount = Number(
-        document.getElementById("amount").value
-    );
-
-    const type = document
-        .getElementById("type")
-        .value;
-
-    const category = document
-        .getElementById("category")
-        .value;
+    const description = document.getElementById("description").value.trim();
+    const amount = Number(document.getElementById("amount").value);
+    const type = document.getElementById("type").value;
+    const category = document.getElementById("category").value;
 
     if (!description) {
         alert("Please enter a description");
@@ -197,28 +167,24 @@ function addTransaction() {
     renderTransactions();
     renderCalendar();
     renderChart();
+    updateStorageInfo();
     clearForm();
     closeTransactionModal();
 }
 
 function saveTransactions() {
-    localStorage.setItem(
-        "expenseTransactions",
-        JSON.stringify(transactions)
-    );
+    localStorage.setItem("expenseTransactions", JSON.stringify(transactions));
 }
 
 function loadTransactions() {
     const savedData = localStorage.getItem("expenseTransactions");
-
-    transactions = savedData
-        ? JSON.parse(savedData)
-        : [];
+    transactions = savedData ? JSON.parse(savedData) : [];
 
     updateDashboard();
     renderTransactions();
     renderCalendar();
     renderChart();
+    updateStorageInfo();
 }
 
 function clearForm() {
@@ -227,78 +193,46 @@ function clearForm() {
     const type = document.getElementById("type");
     const category = document.getElementById("category");
 
-    if (description) {
-        description.value = "";
-    }
-
-    if (amount) {
-        amount.value = "";
-    }
-
-    if (type) {
-        type.value = "expense";
-    }
-
-    if (category) {
-        category.value = "Food";
-    }
+    if (description) description.value = "";
+    if (amount) amount.value = "";
+    if (type) type.value = "expense";
+    if (category) category.value = "Food";
 }
 
 function getMonthKey(date) {
     const year = date.getFullYear();
-
-    const month = String(
-        date.getMonth() + 1
-    ).padStart(2, "0");
-
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     return `${year}-${month}`;
 }
 
 function initializeMonthPicker() {
     const monthPicker = document.getElementById("monthPicker");
-
-    if (!monthPicker) {
-        return;
-    }
+    if (!monthPicker) return;
 
     monthPicker.value = getMonthKey(selectedMonth);
-
     updateIncomeInput();
 }
 
 function loadMonthlyIncomes() {
     const saved = localStorage.getItem("monthlyIncomes");
-
-    monthlyIncomes = saved
-        ? JSON.parse(saved)
-        : {};
+    monthlyIncomes = saved ? JSON.parse(saved) : {};
 }
 
 function saveMonthlyIncomes() {
-    localStorage.setItem(
-        "monthlyIncomes",
-        JSON.stringify(monthlyIncomes)
-    );
+    localStorage.setItem("monthlyIncomes", JSON.stringify(monthlyIncomes));
 }
 
 function updateIncomeInput() {
     const input = document.getElementById("monthlyIncomeInput");
-
-    if (!input) {
-        return;
-    }
+    if (!input) return;
 
     const key = getMonthKey(selectedMonth);
-
     input.value = monthlyIncomes[key] || "";
 }
 
 function saveMonthlyIncome() {
     const key = getMonthKey(selectedMonth);
-
-    const income = Number(
-        document.getElementById("monthlyIncomeInput").value
-    );
+    const income = Number(document.getElementById("monthlyIncomeInput").value);
 
     if (income < 0) {
         alert("Please enter a valid income");
@@ -311,15 +245,13 @@ function saveMonthlyIncome() {
     updateDashboard();
     renderCalendar();
     renderChart();
+    updateStorageInfo();
     closeIncomeModal();
 }
 
 function changeSelectedMonth() {
     const value = document.getElementById("monthPicker").value;
-
-    if (!value) {
-        return;
-    }
+    if (!value) return;
 
     selectedMonth = new Date(value + "-01");
 
@@ -330,15 +262,10 @@ function changeSelectedMonth() {
 }
 
 function goToPreviousMonth() {
-    selectedMonth.setMonth(
-        selectedMonth.getMonth() - 1
-    );
+    selectedMonth.setMonth(selectedMonth.getMonth() - 1);
 
     const monthPicker = document.getElementById("monthPicker");
-
-    if (monthPicker) {
-        monthPicker.value = getMonthKey(selectedMonth);
-    }
+    if (monthPicker) monthPicker.value = getMonthKey(selectedMonth);
 
     updateIncomeInput();
     updateDashboard();
@@ -347,15 +274,10 @@ function goToPreviousMonth() {
 }
 
 function goToNextMonth() {
-    selectedMonth.setMonth(
-        selectedMonth.getMonth() + 1
-    );
+    selectedMonth.setMonth(selectedMonth.getMonth() + 1);
 
     const monthPicker = document.getElementById("monthPicker");
-
-    if (monthPicker) {
-        monthPicker.value = getMonthKey(selectedMonth);
-    }
+    if (monthPicker) monthPicker.value = getMonthKey(selectedMonth);
 
     updateIncomeInput();
     updateDashboard();
@@ -365,13 +287,10 @@ function goToNextMonth() {
 
 function updateDashboard() {
     const now = new Date();
-
     const selectedYear = selectedMonth.getFullYear();
     const selectedMonthNumber = selectedMonth.getMonth();
     const selectedMonthKey = getMonthKey(selectedMonth);
-
-    const selectedMonthIncome =
-        monthlyIncomes[selectedMonthKey] || 0;
+    const selectedMonthIncome = monthlyIncomes[selectedMonthKey] || 0;
 
     let todayExpense = 0;
     let weeklyExpense = 0;
@@ -380,14 +299,9 @@ function updateDashboard() {
 
     transactions.forEach(transaction => {
         const transactionDate = new Date(transaction.date);
+        const daysDifference = (now - transactionDate) / (1000 * 60 * 60 * 24);
 
-        const daysDifference =
-            (now - transactionDate) /
-            (1000 * 60 * 60 * 24);
-
-        const sameDay =
-            transactionDate.toDateString() ===
-            now.toDateString();
+        const sameDay = transactionDate.toDateString() === now.toDateString();
 
         const sameSelectedMonth =
             transactionDate.getMonth() === selectedMonthNumber &&
@@ -397,21 +311,10 @@ function updateDashboard() {
             transactionDate.getFullYear() === selectedYear;
 
         if (transaction.type === "expense") {
-            if (sameDay) {
-                todayExpense += transaction.amount;
-            }
-
-            if (daysDifference <= 7) {
-                weeklyExpense += transaction.amount;
-            }
-
-            if (sameSelectedMonth) {
-                monthlyExpense += transaction.amount;
-            }
-
-            if (sameSelectedYear) {
-                yearlyExpense += transaction.amount;
-            }
+            if (sameDay) todayExpense += transaction.amount;
+            if (daysDifference <= 7) weeklyExpense += transaction.amount;
+            if (sameSelectedMonth) monthlyExpense += transaction.amount;
+            if (sameSelectedYear) yearlyExpense += transaction.amount;
         }
     });
 
@@ -419,23 +322,14 @@ function updateDashboard() {
 
     Object.keys(monthlyIncomes).forEach(key => {
         const year = Number(key.split("-")[0]);
-
-        if (year === selectedYear) {
-            yearlyIncome += Number(monthlyIncomes[key]);
-        }
+        if (year === selectedYear) yearlyIncome += Number(monthlyIncomes[key]);
     });
 
-    const netBalance =
-        selectedMonthIncome - monthlyExpense;
+    const netBalance = selectedMonthIncome - monthlyExpense;
 
     const spentPercent =
         selectedMonthIncome > 0
-            ? Math.min(
-                100,
-                Math.round(
-                    (monthlyExpense / selectedMonthIncome) * 100
-                )
-            )
+            ? Math.min(100, Math.round((monthlyExpense / selectedMonthIncome) * 100))
             : 0;
 
     setText("todaySpend", formatCurrency(todayExpense));
@@ -451,12 +345,10 @@ function updateDashboard() {
     const balanceElement = document.getElementById("netBalance");
 
     if (balanceElement) {
-        balanceElement.style.color =
-            netBalance < 0 ? "#ef4444" : "#22c55e";
+        balanceElement.style.color = netBalance < 0 ? "#ef4444" : "#22c55e";
     }
 
-    const progressCircle =
-        document.querySelector(".progress-circle");
+    const progressCircle = document.querySelector(".progress-circle");
 
     if (progressCircle) {
         const angle = spentPercent * 3.6;
@@ -471,10 +363,7 @@ function updateDashboard() {
 
 function setText(id, value) {
     const element = document.getElementById(id);
-
-    if (element) {
-        element.textContent = value;
-    }
+    if (element) element.textContent = value;
 }
 
 function getFilteredTransactions() {
@@ -496,18 +385,14 @@ function getFilteredTransactions() {
 
 function renderTransactions() {
     const list = document.getElementById("transactionList");
-
-    if (!list) {
-        return;
-    }
+    if (!list) return;
 
     list.innerHTML = "";
 
     const filteredTransactions =
-        getFilteredTransactions()
-            .sort(
-                (a, b) => new Date(b.date) - new Date(a.date)
-            );
+        getFilteredTransactions().sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+        );
 
     if (filteredTransactions.length === 0) {
         list.innerHTML = `
@@ -515,20 +400,14 @@ function renderTransactions() {
                 No transactions found.
             </li>
         `;
-
         return;
     }
 
     filteredTransactions.forEach(transaction => {
         const item = document.createElement("li");
-
         const icon = getCategoryIcon(transaction.category);
-
-        const sign =
-            transaction.type === "income" ? "+" : "-";
-
-        const amountClass =
-            transaction.type === "income" ? "income" : "expense";
+        const sign = transaction.type === "income" ? "+" : "-";
+        const amountClass = transaction.type === "income" ? "income" : "expense";
 
         item.innerHTML = `
             <div class="transaction-info">
@@ -565,65 +444,48 @@ function renderTransactions() {
 }
 
 function editTransaction(id) {
-    const transaction =
-        transactions.find(item => item.id === id);
+    const transaction = transactions.find(item => item.id === id);
+    if (!transaction) return;
 
-    if (!transaction) {
-        return;
-    }
-
-    document.getElementById("description").value =
-        transaction.description;
-
-    document.getElementById("amount").value =
-        transaction.amount;
-
-    document.getElementById("type").value =
-        transaction.type;
-
-    document.getElementById("category").value =
-        transaction.category;
+    document.getElementById("description").value = transaction.description;
+    document.getElementById("amount").value = transaction.amount;
+    document.getElementById("type").value = transaction.type;
+    document.getElementById("category").value = transaction.category;
 
     deleteTransactionWithoutPrompt(id);
-
     openTransactionModal();
 }
 
 function deleteTransactionWithoutPrompt(id) {
-    transactions =
-        transactions.filter(transaction => transaction.id !== id);
+    transactions = transactions.filter(transaction => transaction.id !== id);
 
     saveTransactions();
     updateDashboard();
     renderTransactions();
     renderCalendar();
     renderChart();
+    updateStorageInfo();
 }
 
 function deleteTransaction(id) {
     const confirmed = confirm("Delete this transaction?");
+    if (!confirmed) return;
 
-    if (!confirmed) {
-        return;
-    }
-
-    transactions =
-        transactions.filter(transaction => transaction.id !== id);
+    transactions = transactions.filter(transaction => transaction.id !== id);
 
     saveTransactions();
     updateDashboard();
     renderTransactions();
     renderCalendar();
     renderChart();
+    updateStorageInfo();
 }
 
 function renderCalendar() {
     const calendarGrid = document.getElementById("calendarGrid");
     const calendarTitle = document.getElementById("calendarTitle");
 
-    if (!calendarGrid || !calendarTitle) {
-        return;
-    }
+    if (!calendarGrid || !calendarTitle) return;
 
     calendarGrid.innerHTML = "";
 
@@ -631,36 +493,26 @@ function renderCalendar() {
     const month = selectedMonth.getMonth();
 
     calendarTitle.textContent =
-        selectedMonth.toLocaleDateString(
-            "en-IN",
-            {
-                month: "long",
-                year: "numeric"
-            }
-        );
+        selectedMonth.toLocaleDateString("en-IN", {
+            month: "long",
+            year: "numeric"
+        });
 
-    const firstDay =
-        new Date(year, month, 1).getDay();
-
-    const daysInMonth =
-        new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement("div");
-
         emptyCell.className = "calendar-day empty";
-
         calendarGrid.appendChild(emptyCell);
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day);
-
         let dailyExpense = 0;
 
         transactions.forEach(transaction => {
-            const transactionDate =
-                new Date(transaction.date);
+            const transactionDate = new Date(transaction.date);
 
             if (
                 transaction.type === "expense" &&
@@ -673,13 +525,9 @@ function renderCalendar() {
         });
 
         const dayCell = document.createElement("div");
-
         dayCell.className = "calendar-day";
 
-        if (
-            date.toDateString() ===
-            new Date().toDateString()
-        ) {
+        if (date.toDateString() === new Date().toDateString()) {
             dayCell.classList.add("today");
         }
 
@@ -710,24 +558,15 @@ function renderCalendar() {
 
     const today = new Date();
 
-    if (
-        today.getFullYear() === year &&
-        today.getMonth() === month
-    ) {
-        showDayTransactions(
-            year,
-            month,
-            today.getDate()
-        );
+    if (today.getFullYear() === year && today.getMonth() === month) {
+        showDayTransactions(year, month, today.getDate());
     } else {
         setText("selectedDayTitle", "Select a day");
 
         const selectedList =
             document.getElementById("selectedDayTransactions");
 
-        if (selectedList) {
-            selectedList.innerHTML = "";
-        }
+        if (selectedList) selectedList.innerHTML = "";
     }
 }
 
@@ -735,28 +574,22 @@ function showDayTransactions(year, month, day) {
     const title = document.getElementById("selectedDayTitle");
     const list = document.getElementById("selectedDayTransactions");
 
-    if (!title || !list) {
-        return;
-    }
+    if (!title || !list) return;
 
     const selectedDate = new Date(year, month, day);
 
     title.textContent =
-        selectedDate.toLocaleDateString(
-            "en-IN",
-            {
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-            }
-        );
+        selectedDate.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
 
     list.innerHTML = "";
 
     const dayTransactions =
         transactions.filter(transaction => {
-            const transactionDate =
-                new Date(transaction.date);
+            const transactionDate = new Date(transaction.date);
 
             return (
                 transactionDate.getFullYear() === year &&
@@ -771,20 +604,14 @@ function showDayTransactions(year, month, day) {
                 No transactions for this day.
             </li>
         `;
-
         return;
     }
 
     dayTransactions.forEach(transaction => {
         const item = document.createElement("li");
-
         const icon = getCategoryIcon(transaction.category);
-
-        const sign =
-            transaction.type === "income" ? "+" : "-";
-
-        const amountClass =
-            transaction.type === "income" ? "income" : "expense";
+        const sign = transaction.type === "income" ? "+" : "-";
+        const amountClass = transaction.type === "income" ? "income" : "expense";
 
         item.innerHTML = `
             <div class="day-transaction-info">
@@ -809,16 +636,12 @@ function showDayTransactions(year, month, day) {
 function renderChart() {
     const chartCanvas = document.getElementById("expenseChart");
 
-    if (!chartCanvas || typeof Chart === "undefined") {
-        return;
-    }
+    if (!chartCanvas || typeof Chart === "undefined") return;
 
     const categoryTotals = {};
 
     transactions.forEach(transaction => {
-        if (transaction.type !== "expense") {
-            return;
-        }
+        if (transaction.type !== "expense") return;
 
         if (!categoryTotals[transaction.category]) {
             categoryTotals[transaction.category] = 0;
@@ -879,14 +702,11 @@ function formatDate(dateString) {
         return "Today";
     }
 
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        }
-    );
+    return date.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
 }
 
 function getCategoryIcon(category) {
@@ -938,6 +758,18 @@ function toggleTheme() {
     }
 })();
 
+function updateStorageInfo() {
+    const info = document.getElementById("storageInfo");
+
+    if (!info) return;
+
+    const transactionCount = transactions.length;
+    const incomeMonths = Object.keys(monthlyIncomes).length;
+
+    info.textContent =
+        `${transactionCount} transactions saved locally • ${incomeMonths} monthly income records`;
+}
+
 function exportData() {
     const backup = {
         version: 1,
@@ -975,13 +807,88 @@ function exportData() {
     URL.revokeObjectURL(url);
 }
 
+function exportCsvData() {
+    if (transactions.length === 0) {
+        alert("No transactions to export");
+        return;
+    }
+
+    const rows = [
+        [
+            "Date",
+            "Type",
+            "Category",
+            "Description",
+            "Amount"
+        ]
+    ];
+
+    transactions.forEach(transaction => {
+        rows.push([
+            formatCsvDate(transaction.date),
+            transaction.type,
+            transaction.category,
+            transaction.description,
+            transaction.amount
+        ]);
+    });
+
+    const csvContent =
+        rows
+            .map(row => row.map(escapeCsvValue).join(","))
+            .join("\n");
+
+    const blob =
+        new Blob(
+            [csvContent],
+            {
+                type: "text/csv;charset=utf-8;"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+    link.download = "expense-transactions.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+function escapeCsvValue(value) {
+    const text = String(value ?? "");
+
+    if (
+        text.includes(",") ||
+        text.includes('"') ||
+        text.includes("\n")
+    ) {
+        return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    return text;
+}
+
+function formatCsvDate(dateString) {
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    });
+}
+
 function importData(event) {
     const file =
         event.target.files[0];
 
-    if (!file) {
-        return;
-    }
+    if (!file) return;
 
     const reader =
         new FileReader();
@@ -1011,6 +918,7 @@ function importData(event) {
             renderTransactions();
             renderCalendar();
             renderChart();
+            updateStorageInfo();
 
             alert("Backup restored successfully");
         } catch {
